@@ -1,5 +1,8 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
+// schema for user
 const UserSchema = new Schema(
   {
     username: {
@@ -18,8 +21,44 @@ const UserSchema = new Schema(
       unique: true,
       trim: true,
     },
+    friends: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true }
 );
 
-export default UserSchema;
+// Encrypt password using bcrypt
+UserSchema.pre("save", async function () {
+  if (!this.password) {
+    throw new Error("Password is required");
+  }
+  if (this.password.length < 6) {
+    throw new Error("Password must be at least 6 characters");
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Sign JWT and return
+UserSchema.methods.getSignedJwtToken = function () {
+  const secret = process.env.JWT_SECRET || "kalaboki";
+  const expire = process.env.JWT_EXPIRE || "30d";
+  if (!secret) {
+    throw new Error("JWT secret is required");
+  }
+  if (!expire) {
+    throw new Error("JWT expire is required");
+  }
+  return jwt.sign({ id: this._id, user: this.username }, secret, {
+    expiresIn: expire,
+  });
+};
+
+// check if password matches
+UserSchema.methods.matchPassword = async function (enteredPassword: string) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+export default mongoose.model("User", UserSchema);
