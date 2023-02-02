@@ -7,6 +7,11 @@ const CommentSchema = new Schema(
       required: [true, "Please provide a body"],
       trim: true,
     },
+    post_id: {
+      type: Schema.Types.ObjectId,
+      required: [true, "Please provide a post_id"],
+      ref: "Post",
+    },
     upVotes: {
       type: [Schema.Types.ObjectId],
       default: [],
