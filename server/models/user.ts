@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Error } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -18,18 +18,22 @@ const UserSchema = new Schema(
     email: {
       type: String,
       require: [true, "Please provide an email"],
-      unique: true,
+      unique: false,
       trim: true,
     },
     friends: {
       type: [String],
       default: [],
     },
+    karma: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
 
-// Encrypt password using bcrypt
+// ? Encrypt password using bcrypt
 UserSchema.pre("save", async function () {
   if (!this.password) {
     throw new Error("Password is required");
@@ -61,4 +65,5 @@ UserSchema.methods.matchPassword = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-export default mongoose.model("User", UserSchema);
+const User = mongoose.model("User", UserSchema);
+export default User;
