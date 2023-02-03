@@ -14,12 +14,14 @@ const GroupSchema = new Schema(
       trim: true,
     },
     members: {
-      type: [String],
+      type: [Schema.Types.ObjectId],
       default: [],
+      ref: "User",
     },
-    admins: {
-      type: [String],
+    moderators: {
+      type: [Schema.Types.ObjectId],
       default: [],
+      ref: "User",
     },
     creator_id: {
       type: Schema.Types.ObjectId,
@@ -34,5 +36,4 @@ const GroupSchema = new Schema(
   },
   { timestamps: true }
 );
-
 export default mongoose.model("Group", GroupSchema);
