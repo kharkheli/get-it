@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import next from "next";
 import dotenv from "dotenv";
 import * as process from "process";
+import cookieParser from "cookie-parser";
 import connectToDatabase from "./db/connect";
 import { mainRouter } from "./router";
 
@@ -23,6 +24,7 @@ const uri = process.env.MONGODB_URI;
     await app.prepare();
     const server = express();
     server.use(express.json());
+    server.use(cookieParser());
     server.use("/api", mainRouter);
     server.all("*", (req: Request, res: Response) => {
       return handle(req, res);
