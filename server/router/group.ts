@@ -1,8 +1,10 @@
 import express from "express";
-import { createGroup } from "../handlers";
+import { group } from "../handlers";
+
+const { create } = group;
 
 const router = express.Router();
 
-router.post("/create", createGroup);
+router.post("/create", create);
 
 export default router;

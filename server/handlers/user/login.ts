@@ -20,7 +20,7 @@ const login = async (req: Request, res: Response) => {
         .send({ login: false, message: "Invalid credentials" });
     }
     const token = user.getSignedJwtToken();
-    return res.status(200).send({ login: true, token });
+    return res.cookie("user_token", token).status(200).send({ login: true });
   } catch (err) {
     console.error(err);
     return res

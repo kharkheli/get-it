@@ -1,5 +1,7 @@
 import express from "express";
-import { login, register } from "../handlers";
+import { user } from "../handlers";
+
+const { login, register } = user;
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Group } from "@server/models";
 
-const createGroup = async (req: Request, res: Response) => {
+const create = async (req: Request, res: Response) => {
   try {
     const group = await Group.create(req.body);
     return res.status(201).json({
@@ -35,4 +35,4 @@ const createGroup = async (req: Request, res: Response) => {
   }
 };
 
-export default createGroup;
+export default create;
