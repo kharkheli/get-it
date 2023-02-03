@@ -32,4 +32,4 @@ const suggestionGroupSchema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Group", suggestionGroupSchema);
+export default mongoose.model("SuggestionGroup", suggestionGroupSchema);
